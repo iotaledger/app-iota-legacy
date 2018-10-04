@@ -25,11 +25,11 @@ include $(BOLOS_SDK)/Makefile.defines
 APPNAME = "IOTA"
 APPVERSION_MAJOR = 0
 APPVERSION_MINOR = 4
-APPVERSION_PATCH = 0
+APPVERSION_PATCH = 1
 APPVERSION = $(APPVERSION_MAJOR).$(APPVERSION_MINOR).$(APPVERSION_PATCH)
 APP_LOAD_PARAMS = --path "44'/4218'" --appFlags 0x00 $(COMMON_LOAD_PARAMS)
 
-ICONNAME = icon.gif
+ICONNAME = nanos_app_iota.gif
 
 # Build configuration
 
@@ -82,6 +82,9 @@ AFLAGS +=
 LD := $(GCCPATH)arm-none-eabi-gcc
 LDFLAGS += -O3 -Os
 LDLIBS += -lm -lgcc -lc
+
+# import rules to compile glyphs(/pone)
+include $(BOLOS_SDK)/Makefile.glyphs
 
 # Main rules
 
