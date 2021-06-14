@@ -1,0 +1,6 @@
+.*
+dev/
+!dev/sdk/
+docs/
+tests/
+resources/
