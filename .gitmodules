@@ -4,9 +4,3 @@
 [submodule "contrib/blue-app-iota-loader"]
 	path = contrib/blue-app-iota-loader
 	url = https://github.com/IOTA-Ledger/blue-app-iota-loader.git
-[submodule "dev/nanos-secure-sdk"]
-	path = dev/nanos-secure-sdk
-	url = https://github.com/LedgerHQ/nanos-secure-sdk
-[submodule "dev/blue-secure-sdk"]
-	path = dev/blue-secure-sdk
-	url = https://github.com/LedgerHQ/blue-secure-sdk
