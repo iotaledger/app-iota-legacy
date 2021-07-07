@@ -28,7 +28,7 @@ RUN python3.8 setup.py install
 WORKDIR /root/git/app-iota-legacy/dev/speculos
 RUN cmake -Bbuild -H. && make -C build/ 
 
-WORKDIR /root/git/ledger-iota-app
+WORKDIR /root/git/app-iota-legacy
 
 RUN echo    "#!/bin/bash\n" \
     "export DEVICE=nanos\n" \
@@ -41,4 +41,4 @@ RUN echo    "#!/bin/bash\n" \
 RUN sed 's|nanos|nanox|g' env_nanos.sh > env_nanox.sh
 
 
-EXPOSE 9999
+EXPOSE 1234

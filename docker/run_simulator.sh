@@ -55,10 +55,10 @@ else
     VOLUME_MOUNT_ARG="-v /tmp/.X11-unix:/tmp/.X11-unix"
     xhost +local:docker
 fi
-QT_GRAPHICSSYSTEM="native" docker run -p 9999:9999 -it -e DISPLAY=$DISPLAY $VOLUME_MOUNT_ARG build-app-legacy bash -c \
-"cd /root/git/ledger-iota-app/;"\
+QT_GRAPHICSSYSTEM="native" docker run -p 4000:9999 -it -e DISPLAY=$DISPLAY $VOLUME_MOUNT_ARG build-app-legacy bash -c \
+"cd /root/git/app-iota-legacy/;"\
 "source env_${device}.sh;"\
 "make clean;"\
 "SPECULOS=1 make;"\
-"cd /root/git/ledger-iota-app/dev/speculos;"\
-"python3.8 speculos.py --seed 'glory promote mansion idle axis finger extra february uncover one trip resource lawn turtle enact monster seven myth punch hobby comfort wild raise skin' --sdk $sdk -m \$( cat ../../../ledger-iota-app/device.txt )  ../../bin/app.elf"
+"cd /root/git/app-iota-legacy/dev/speculos;"\
+"python3.8 speculos.py --seed 'glory promote mansion idle axis finger extra february uncover one trip resource lawn turtle enact monster seven myth punch hobby comfort wild raise skin' --sdk $sdk -m \$( cat ../../../app-iota-legacy/device.txt )  ../../bin/app.elf"

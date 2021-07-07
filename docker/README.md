@@ -21,8 +21,8 @@ Normally, the `/var/run/docker.sock` file-socket has mode 2660 with `root:docker
 Clone the repository and run the build-script
 
 ```
-$ git clone https://github.com/iotaledger/ledger-iota-app
-$ cd ledger-iota-app
+$ git clone https://github.com/iotaledger/app-iota-legacy
+$ cd app-iota-legacy
 $ git submodule init
 $ git submodule update --recursive
 $ cd docker

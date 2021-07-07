@@ -1,6 +1,8 @@
 .*
 dev/
 !dev/sdk/
+!dev/blue-loader-python/
+!dev/speculos
 docs/
 tests/
 resources/

@@ -45,7 +45,7 @@ echo "device $device selected"
 
 
 docker run --privileged -v /dev/bus/usb:/dev/bus/usb  -it -v /tmp/.X11-unix:/tmp/.X11-unix build-app-legacy bash -c \
-"cd /root/git/ledger-iota-app;"\
+"cd /root/git/app-iota-legacy;"\
 "source env_${device}.sh;"\
 "make clean;"\
 "make load"\
