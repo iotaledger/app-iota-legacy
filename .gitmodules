@@ -10,3 +10,9 @@
 [submodule "dev/sdk/nanos-secure-sdk"]
 	path = dev/sdk/nanos-secure-sdk
 	url = https://github.com/LedgerHQ/nanos-secure-sdk
+[submodule "dev/speculos"]
+	path = dev/speculos
+	url = https://github.com/LedgerHQ/speculos
+[submodule "dev/blue-loader-python"]
+	path = dev/blue-loader-python
+	url = https://github.com/LedgerHQ/blue-loader-python
