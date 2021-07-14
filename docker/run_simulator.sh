@@ -55,7 +55,7 @@ else
     VOLUME_MOUNT_ARG="-v /tmp/.X11-unix:/tmp/.X11-unix"
     xhost +local:docker
 fi
-QT_GRAPHICSSYSTEM="native" docker run -p 4000:9999 -it -e DISPLAY=$DISPLAY $VOLUME_MOUNT_ARG build-app-legacy bash -c \
+QT_GRAPHICSSYSTEM="native" docker run -p 9999:9999 -it -e DISPLAY=$DISPLAY $VOLUME_MOUNT_ARG build-app-legacy bash -c \
 "cd /root/git/app-iota-legacy/;"\
 "source env_${device}.sh;"\
 "make clean;"\
