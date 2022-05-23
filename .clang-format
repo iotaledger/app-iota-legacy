@@ -1,33 +1,20 @@
-Language: Cpp
-# BasedOnStyle
-
-TabWidth: 8
-UseTab: Never
+---
+BasedOnStyle: Google
 IndentWidth: 4
-ColumnLimit: 80
-MaxEmptyLinesToKeep: 2
-
-# Break after function definitions and else 
-BreakBeforeBraces: Stroustrup
-
-AlignAfterOpenBracket: true
-AlignEscapedNewlinesLeft: false
-AlignOperands: true
-AlwaysBreakAfterReturnType: None
-BinPackArguments: true
-BinPackParameters: true
-DerivePointerAlignment: false
+---
+Language: Cpp
+ColumnLimit: 100
 PointerAlignment: Right
+AlignAfterOpenBracket: Align
+AlignConsecutiveMacros: true
+AllowAllParametersOfDeclarationOnNextLine: false
 SortIncludes: false
-SpaceInEmptyParentheses: false
-SpacesInCStyleCastParentheses: false
-SpacesInParentheses: false
-SpacesInSquareBrackets: false
-
-# Never allow single line statements
-AllowShortFunctionsOnASingleLine: false
-AllowShortBlocksOnASingleLine: false
+SpaceAfterCStyleCast: true
 AllowShortCaseLabelsOnASingleLine: false
-AllowShortIfStatementsOnASingleLine: false
-AllowShortLoopsOnASingleLine: false
-
+AllowAllArgumentsOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
+AllowShortBlocksOnASingleLine: Never
+AllowShortFunctionsOnASingleLine: None
+BinPackArguments: false
+BinPackParameters: false
+---
