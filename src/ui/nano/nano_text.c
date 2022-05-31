@@ -10,9 +10,9 @@ void get_main_menu(char *msg)
 
     uint8_t i = 0;
 
-    strncpy(msg + (i++ * TEXT_LEN), TEXT_LEN, "Connect");
-    strncpy(msg + (i++ * TEXT_LEN), TEXT_LEN,"About");
-    strncpy(msg + (i++ * TEXT_LEN), TEXT_LEN,"Exit App");
+    strncpy(msg + (i++ * TEXT_LEN), "Connect", TEXT_LEN);
+    strncpy(msg + (i++ * TEXT_LEN), "About", TEXT_LEN);
+    strncpy(msg + (i++ * TEXT_LEN), "Exit App", TEXT_LEN);
 }
 
 void get_about_menu(char *msg)
@@ -21,9 +21,9 @@ void get_about_menu(char *msg)
 
     uint8_t i = 0;
 
-    strncpy(msg + (i++ * TEXT_LEN), TEXT_LEN, "Version");
-    strncpy(msg + (i++ * TEXT_LEN), TEXT_LEN, "More Info");
-    strncpy(msg + (i++ * TEXT_LEN), TEXT_LEN, "Back");
+    strncpy(msg + (i++ * TEXT_LEN), "Version", TEXT_LEN);
+    strncpy(msg + (i++ * TEXT_LEN), "More Info", TEXT_LEN);
+    strncpy(msg + (i++ * TEXT_LEN), "Back", TEXT_LEN);
 }
 
 void get_more_info_menu(char *msg)
@@ -32,9 +32,9 @@ void get_more_info_menu(char *msg)
 
     uint8_t i = 0;
 
-    strncpy(msg + (i++ * TEXT_LEN), TEXT_LEN, "Please visit");
-    strncpy(msg + (i++ * TEXT_LEN), TEXT_LEN, "iota.org/sec");
-    strncpy(msg + (i++ * TEXT_LEN), TEXT_LEN, "for more info.");
+    strncpy(msg + (i++ * TEXT_LEN), "Please visit", TEXT_LEN);
+    strncpy(msg + (i++ * TEXT_LEN), "iota.org/sec", TEXT_LEN);
+    strncpy(msg + (i++ * TEXT_LEN), "for more info.", TEXT_LEN);
 }
 
 void get_address_menu(char *msg)
