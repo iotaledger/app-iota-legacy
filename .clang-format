@@ -14,7 +14,7 @@ AlignAfterOpenBracket: true
 AlignEscapedNewlinesLeft: false
 AlignOperands: true
 AlwaysBreakAfterReturnType: None
-AlignTrailingComments: true
+AlignTrailingComments: false
 BinPackArguments: true
 BinPackParameters: true
 DerivePointerAlignment: false
