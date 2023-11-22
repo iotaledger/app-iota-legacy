@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Copyright 2022 IOTA-Foundation
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,7 +39,7 @@ function usage {
     exit 1
 }
 
-# pull and tag image 
+# pull and tag image
 function pull_image {
     # already pulled?
     docker inspect --type=image "$2" >& /dev/null && return 0
@@ -48,7 +48,7 @@ function pull_image {
     docker image tag "$1" "$2"
 }
 
-# check if we are using root/sudo 
+# check if we are using root/sudo
 whoami="$( whoami )"
 
 [[ "$whoami" == "root" ]] && {
@@ -237,15 +237,15 @@ docker run \
     # replace () to {} before eval
     eval $( grep '^APPVERSION' Makefile | tr -d ' ' | tr '()' '{}' )
 
-    { sleep 10; echo -e "\nPlease open your browser: http://localhost:5000\n"; echo; } &
+    { sleep 10; echo -e "\nPlease open your browser: http://localhost:4999\n"; echo; } &
 
     (( $gdb )) && extra_args="-d "
 
     docker run \
         -v "$rpath:/speculos/apps" \
-        -p 9999:9999 \
-        -p 5000:5000 \
-        -p 1234:1234 \
+        -p 9998:9999 \
+        -p 4999:5000 \
+        -p 1233:1234 \
         -e SPECULOS_APPNAME="$APPNAME:$APPVERSION" \
         --rm \
         -it \
