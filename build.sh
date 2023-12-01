@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Copyright 2022 IOTA-Foundation
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,26 +29,29 @@ function error {
 
 function usage {
     echo "usage: $0 [-h|--help] [-d|--debug] [-m|--model (nanos*|nanox|nanosplus)] [-l|--load] [-s|--speculos] [-c|--cxlib 1.0.2]"
-    echo "-d|--debug:    build app with DEBUG=1"
-    echo "-m|--model:    nanos (default), nanox, nanosplus"
-    echo "-l|--load:     load app to device"
-    echo "-s|--speculos: run app after building with the speculos simulator"
-    echo "-c|--cxlib:    don't autodetect cx-lib version (for speculos)"
-    echo "-g|--gdb:      start speculos with -d (waiting for gdb debugger)"
-    echo "-a|--analyze   run static code analysis"
+    echo "-d|--debug:      build app with DEBUG=1"
+    echo "-b|--background: start simulator in background (detached)"
+    echo "-m|--model:      nanos (default), nanox, nanosplus"
+    echo "-l|--load:       load app to device"
+    echo "-p|--pull:       force pull docker images before using them"
+    echo "-s|--speculos:   run app after building with the speculos simulator"
+    echo "-c|--cxlib:      don't autodetect cx-lib version (for speculos)"
+    echo "-g|--gdb:        start speculos with -d (waiting for gdb debugger)"
+    echo "-a|--analyze     run static code analysis"
+    echo "-n|--nobuild     don't build the app new"
     exit 1
 }
 
-# pull and tag image 
+# pull and tag image
 function pull_image {
     # already pulled?
-    docker inspect --type=image "$2" >& /dev/null && return 0
+    (( !pull )) && docker inspect --type=image "$2" >& /dev/null && return 0
 
     docker image pull "$1" && \
     docker image tag "$1" "$2"
 }
 
-# check if we are using root/sudo 
+# check if we are using root/sudo
 whoami="$( whoami )"
 
 [[ "$whoami" == "root" ]] && {
@@ -75,8 +78,11 @@ load=0
 speculos=0
 debug=0
 gdb=0
+background=0
 analysis=0
+pull=0
 cxlib=""
+nobuild=0
 while (( $# ))
 do
     case "$1" in
@@ -100,11 +106,20 @@ do
     "-d" | "--debug")
         debug=1
         ;;
+    "-b" | "--background")
+        background=1
+        ;;
     "-g" | "--gdb")
         gdb=1
         ;;
     "-a" | "--analyze")
         analysis=1
+        ;;
+    "-p" | "--pull")
+        pull=1
+        ;;
+    "-n" | "--nobuild")
+        nobuild=1
         ;;
     *)
         error "unknown parameter: $1"
@@ -133,50 +148,13 @@ case "$device" in
         ;;
 esac
 
-# find SDK version number
-BOLOS_SDK="$device-secure-sdk"
-
-[ ! -f "./dev/sdk/$device-secure-sdk/Makefile.defines" ] && error "sdk not found. Are the submodules initialized?"
-
-# get sdk version from sdk
-sdk="$( grep '^#define BOLOS_VERSION' ./dev/sdk/${device}-secure-sdk/include/bolos_version.h | awk '{ print $ 3}' | tr -d '"' )"
-
-# if the first character is a digit, we are convinced it's a valid version number
-grep -q '^[[:digit:]]' <<< "$sdk" || error "$sdk not a valid version"
-
-# find the fitting cxlib of speculos
-[ -z "$cxlib" ] && {
-    # we assume we have the same cxlib as the sdk
-    cxlib="$sdk"
-
-    while [ ! -z "$cxlib" ]
-    do
-        cxlib_fn="./dev/speculos/speculos/cxlib/$model-cx-$cxlib.elf"
-        [ -f "$cxlib_fn" ] && {
-            # we found something matching
-            break
-        }
-        # we iteratively remove the last component of the version
-        # 1.0.2 -> 1.0
-        # 1.0 -> 1
-        # 1 -> ""
-        cxlib="$( awk -F'.' 'BEGIN{OFS="."} NF{NF--};1' <<< "$cxlib" )"
-    done
-}
-
-# if it is zero, we didn't find something matching
-[ -z "$cxlib" ] && error "no fitting cxlib found. Try -c|--cxlib."
-
-# yay, finally we can start
-echo "device $device selected, sdk $sdk found, using cx-lib $cxlib"
-
 # build the app
 # pull and tag image
 pull_image \
     "$IMAGE_BUILD" \
     ledger-app-builder || error "couldn't pull image"
 
-build_flags=""
+build_flags="BOLOS_SDK=/opt/$device-secure-sdk "
 
 # if speculos requested, add the flag
 (( $speculos )) && {
@@ -201,14 +179,16 @@ cmd="make clean && $build_flags make "
 # we have to map usb into the docker when loading the app
 (( $load )) && {
     extra_args+="--privileged -v /dev/bus/usb:/dev/bus/usb "
-    cmd+="&& make load"
+    cmd+="&& $build_flags make load"
 }
 
-docker run \
-    -e BOLOS_SDK="/app/dev/sdk/$BOLOS_SDK" $extra_args \
-    --rm -v "$rpath:/app" \
-    ledger-app-builder \
-        bash -c "$cmd" || error "building failed"
+(( !nobuild )) && {
+    docker run \
+        $extra_args \
+        --rm -v "$rpath:/app" \
+        ledger-app-builder \
+            bash -c "$cmd" || error "building failed"
+}
 
 (( $load )) && {
     # we are finished
@@ -241,19 +221,21 @@ docker run \
 
     (( $gdb )) && extra_args="-d "
 
+    (( $background )) && docker_extra_args="-d "
+
     docker run \
         -v "$rpath:/speculos/apps" \
         -p 9999:9999 \
         -p 5000:5000 \
         -p 1234:1234 \
         -e SPECULOS_APPNAME="$APPNAME:$APPVERSION" \
+        $docker_extra_args \
         --rm \
-        -it \
         speculos \
             --apdu-port 9999 \
             --display headless \
             --seed "$seed" \
-            --sdk "$cxlib" $extra_args \
+            $extra_args \
             -m "$model" /speculos/apps/bin/app.elf
 }
 
